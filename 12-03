@@ -1,1 +1,75 @@
+import pandas as pd 
+from openpyxl import load_workbook
+import numpy as np 
+import itertools
+ 
+d1 = pd.read_excel(r'D:\miniproject\New1.xlsx', sheet_name=0)
+d2 = pd.read_excel(r'D:\miniproject\New1.xlsx', sheet_name=1)
+d3 = pd.read_excel(r'D:\miniproject\New1.xlsx', sheet_name=2)
+d4 = pd.read_excel(r'D:\miniproject\New1.xlsx', sheet_name=3)
+d5 = pd.read_excel(r'D:\miniproject\New1.xlsx', sheet_name=4)
+ 
+# a3 = pd.read_excel(r'D:\miniproject\New1.xlsx', sheet_name=['Sheet3'])
+# a4 = pd.read_excel(r'D:\miniproject\New1.xlsx', sheet_name=['Sheet4'])
+# a5 = pd.read_excel(r'D:\miniproject\New1.xlsx', sheet_name=['Sheet5'])
+ 
+# mdc=pd.concat(df_first_shift,axis=0,ignore_index=True)
+# print(a1)
+# print(a2)
+# print(a3)
+# print(a4)
+# print(a5)
+ 
+# merging the files
+ 
+d6 = d1.merge(d2, on = "year", how = "left")
+d7 = d6.merge(d3, on = "year", how = "left")
+d8 = d7.merge(d4, on = "year", how = "left")
+d9 = d8.merge(d5, on = "year", how = "left")
+ 
+# print(a9)
+ 
+#creating new excel file
+# a9.to_excel("Output.xlsx", index = False)
+# variable_1 = int(input("year : "))
+# print(variable_1)
+variable_1 = int(input("Enter year : "))
+ 
+pf_variable = pd.DataFrame(d9, columns= ['year','India','Srilanka',
+'kiribati','Bhutan','China',
+'Iran','Iraq','Libya','UAE',
+'Australia','Newzealand','England',
+'Greenland','Greece','Egypt',
+'Italy','Germany','France',
+'Nigeria','Ethopia','Ghana',
+'Angol','Tanzania','Morocco',
+'Sengal','Uganda','Mali',
+'Brazil','Russia','spain',
+'Qatar','Colombia','Georgia',
+'peru','Indonesia','chile',
+'swedish','Pakistan','Bangladesh',
+'hungary','belarus','Austria',
+'japan','Tunisia','panama'])
+# print(pf_variable)
+ 
+pf_variable.set_index('year', inplace=True)
+ 
+res = pf_variable.loc[variable_1]
+print(res)
+# res.dropna()
+ 
+path = r"D:\miniproject\New1.xlsx"
+book  = load_workbook(path)
+writer = pd.ExcelWriter(path, engine="openpyxl")
+writer.book = book
+res.to_excel(writer, sheet_name  = "mastersheet")
+
+if 'mastersheet' in book.sheetnames:
+    ref = book['mastersheet']
+    book.remove(ref)
+res.to_excel(writer, sheet_name='mastersheet')
+ 
+writer.save()
+writer.close()
+# load_workbook.book = book
 
